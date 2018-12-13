@@ -98,33 +98,34 @@ while ($row = mysqli_fetch_assoc($result)) {
    //********************************************
    //ON va chercher les informations De la compagnie
    //*
-   echo $NumClient;
-   echo $NumClient;
-   echo $NumClient;
-    
+
    $sql = "SELECT * FROM servi271_McKinnon.Client where NumClient = '$NumClient'";
-   $membre = mysqli_query($conn, $sql);;
-   if ((!$membre)  ||  (mysqli_num_rows($membre) == 0)  ||   (mysqli_num_rows($membre) > 1)){
-       fwrite($myfile,"Erreur - SQLSTATE $membre->sqlstate.\n");
-       fwrite($myfile,"Erreur - ReqRow   = mysqli_num_rows($membre).\n");
+   $client = mysqli_query($conn, $sql);;
+   //if ((!$membre)  ||  (mysqli_num_rows($membre) == 0)  ||   (mysqli_num_rows($membre) > 1)){
+   if ((!$client)){
+       fwrite($myfile,"Erreur - SQLSTATE $client->sqlstate.\n");
+       fwrite($myfile,"Erreur - ReqRow   = mysqli_num_rows($client).\n");
        echo 'Erreur Chercher Membre ';
        goto END; 
    } 
-   $rowMembre = mysqli_fetch_assoc($membre);
-   $NomMembre = $rowMembre["NomMembre"];
-   $CourielMembre = $rowMembre["CourielMembre"]; 
-   //* On libère la mémoire 
-   $membre->free();
-   $mail->setFrom($CourielMembre, $NomMembre);  
+   $rowclient = mysqli_fetch_assoc($client);
+   $NomClient = $rowMembre["NomClient"];
+   
+   $mail->Subject = 'Demande de billets pour ' .$NomClient . ' par ' . $NomMembre .': ' . $CleDemande;  
+   echo $mail->Subject . '<br>'; 
    //Fin des information du demandeur
    //********************************************  
-    
    
 
    if (mysqli_num_rows($biletts) == 0) {
-      fwrite($myfile,"          Aucune Billets pour cette demande\n");
+      $StrMessage ="Aucune Billets pour cette demande\n"; 
+      fwrite($myfile,"          " .$StrMessage  );
       //on va fermer le billets
-      //CloseDemande( $CleDemande );
+      $mail->Body = $StrMessage;
+      if (!$mail->send()) {
+          fwrite($myfile,"Erreur - mailsend $mail->ErrorInfo.\n");
+       }
+      CloseDemande( $CleDemande );
       continue;
    }
    while ($rowBillet = mysqli_fetch_assoc($biletts)) {

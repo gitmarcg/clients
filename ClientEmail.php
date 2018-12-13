@@ -35,4 +35,5 @@ $mail->SMTPAuth = true;
 $mail->Username = "marc@servicesmckinnon.com";
 //Password to use for SMTP authentication
 $mail->Password = "pakel2018";
+$mail->addAddress('marc@servicesmckinnon.com', 'Marc Gagné');
 ?>
