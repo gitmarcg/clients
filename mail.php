@@ -1,0 +1,1 @@
+require 'PHPMailer/class.phpmailer.php';
