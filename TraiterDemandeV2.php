@@ -3,6 +3,7 @@ ob_start();
 session_start(); // On démarre la session AVANT toute chose
 include 'connect.php';
 include 'ClientEmail.php';
+include 'FtpConnect.php';
 
 //On ce connect à la database                                           
 $conn = OpenCon();
@@ -129,6 +130,9 @@ while ($row = mysqli_fetch_assoc($result)) {
       continue;
    }
    while ($rowBillet = mysqli_fetch_assoc($biletts)) {
+         /**** Vérifier si le billet exist dans un premier temps */
+         
+         
          $NoBillet = $rowBillet["NumBillet"];
          fwrite($myfile,"          Numérode Billet : $NoBillet \n");
   }
