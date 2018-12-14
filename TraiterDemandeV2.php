@@ -3,7 +3,7 @@ ob_start();
 session_start(); // On démarre la session AVANT toute chose
 include 'connect.php';
 include 'ClientEmail.php';
-include 'FtpConnect.php';
+include 'FtpBillet.php';
 
 //On ce connect à la database                                           
 $conn = OpenCon();
@@ -64,10 +64,10 @@ while ($row = mysqli_fetch_assoc($result)) {
    $NumClient = $row["NumClient"];    
    fwrite($myfile,"Demande Numéro : $CleDemande , Demandeur : $NumMembre \n");
    $sql = "SELECT * FROM servi271_McKinnon.DemandeBillet where CleDemande = '$CleDemande'";
-   $biletts = mysqli_query($conn, $sql);
-   if (!$biletts) {
-       fwrite($myfile,"Erreur - SQLSTATE $biletts ->sqlstate.\n");
-       $biletts->free();
+   $billets = mysqli_query($conn, $sql);
+   if (!$billets) {
+       fwrite($myfile,"Erreur - SQLSTATE $billets ->sqlstate.\n");
+       $billets->free();
        goto END; 
    }
    //********************************************
@@ -118,7 +118,7 @@ while ($row = mysqli_fetch_assoc($result)) {
    //********************************************  
    
 
-   if (mysqli_num_rows($biletts) == 0) {
+   if (mysqli_num_rows($billets) == 0) {
       $StrMessage ="Aucune Billets pour cette demande\n"; 
       fwrite($myfile,"          " .$StrMessage  );
       //on va fermer le billets
@@ -129,13 +129,13 @@ while ($row = mysqli_fetch_assoc($result)) {
       CloseDemande( $CleDemande );
       continue;
    }
-   while ($rowBillet = mysqli_fetch_assoc($biletts)) {
+   $conn_id = FtpConnect();
+   while ($rowBillet = mysqli_fetch_assoc($billets)) {
          /**** Vérifier si le billet exist dans un premier temps */
-         
-         Ftp();
          $NoBillet = $rowBillet["NumBillet"];
          fwrite($myfile,"          Numérode Billet : $NoBillet \n");
   }
+  FtpClose($conn_id);
 
 }
 
