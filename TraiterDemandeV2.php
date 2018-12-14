@@ -132,7 +132,7 @@ while ($row = mysqli_fetch_assoc($result)) {
    while ($rowBillet = mysqli_fetch_assoc($biletts)) {
          /**** Vérifier si le billet exist dans un premier temps */
          
-         
+         Ftp();
          $NoBillet = $rowBillet["NumBillet"];
          fwrite($myfile,"          Numérode Billet : $NoBillet \n");
   }
