@@ -5,18 +5,19 @@ include 'connect.php';
 include 'ClientEmail.php';
 include 'FtpBillet.php';
 
+$LigneT = str_repeat("-", 79) . "\n";
+$LigneE = str_repeat("*", 79) . "\n";
+
 //On ce connect à la database                                           
 $conn = OpenCon();
 
 date_default_timezone_set('America/Toronto');
 $date = date("Y-m-d_His");
 $myfile = fopen("log/$date.txt", "w");
-$txt = "********************************************************************************\n";
-fwrite($myfile, $txt);
+fwrite($myfile, $LigneE);
 $txt = "************************************* DEBUT ************************************\n";
 fwrite($myfile, $txt);
-$txt = "********************************************************************************\n";
-fwrite($myfile, $txt);
+fwrite($myfile, $LigneE);
 $txt = "Log : $date\n";
 fwrite($myfile, $txt);
 
@@ -47,7 +48,7 @@ if (!$result) {
 $NombreDemande = mysqli_num_rows($result);
 $txt = "Nombre dse demande à traiter : $NombreDemande \n";
 fwrite($myfile, $txt);
-$txt = "********************************************************************************\n";
+fwrite($myfile, $LigneE);
 fwrite($myfile, $txt);
 if (mysqli_num_rows($result) == 0) {
    fwrite($myfile,"Aucune ligne trouvée ----> Fin.");
@@ -56,13 +57,17 @@ if (mysqli_num_rows($result) == 0) {
 
 //** On a au moins une demande
 
+
 //** On l'analyse pour chaque demande
 while ($row = mysqli_fetch_assoc($result)) {
    // On regarde toute les billets relier a cette demande
    $CleDemande = $row["CleDemande"];
    $NumMembre  = $row["NumMembre"];
-   $NumClient = $row["NumClient"];    
+   $NumClient = $row["NumClient"];
+   fwrite($myfile,"$LigneE");
+   fwrite($myfile,"$LigneE");    
    fwrite($myfile,"Demande Numéro : $CleDemande , Demandeur : $NumMembre \n");
+   fwrite($myfile,"$LigneE");
    $sql = "SELECT * FROM servi271_McKinnon.DemandeBillet where CleDemande = '$CleDemande'";
    $billets = mysqli_query($conn, $sql);
    if (!$billets) {
@@ -88,11 +93,13 @@ while ($row = mysqli_fetch_assoc($result)) {
    $rowMembre = mysqli_fetch_assoc($membre);
 
    $NomMembre = $rowMembre["NomMembre"];
-   $CourielMembre = $rowMembre["CourielMembre"]; 
+   $CourielMembre = $rowMembre["CourielMembre"];
+   $TavailPour = $rowMembre["NumClient"]; 
    //* On libère la mémoire 
    $membre->free();
    $mail->setFrom($CourielMembre, $NomMembre);
-   fwrite($myfile,"Nom demandeur : $NomMembre , Couriel : $CourielMembre \n"); 
+   fwrite($myfile,"Nom demandeur : $NomMembre , Couriel : $CourielMembre \n");
+   fwrite($myfile,"$LigneT \n"); 
    //Fin des information du demandeur
    //********************************************
    
@@ -117,7 +124,7 @@ while ($row = mysqli_fetch_assoc($result)) {
    //Fin des information du demandeur
    //********************************************  
    
-
+   //*** Si la demande ne contient aucun billet
    if (mysqli_num_rows($billets) == 0) {
       $StrMessage ="Aucune Billets pour cette demande\n"; 
       fwrite($myfile,"          " .$StrMessage  );
@@ -129,12 +136,44 @@ while ($row = mysqli_fetch_assoc($result)) {
       CloseDemande( $CleDemande );
       continue;
    }
+   //*** Connection si FTP
    $conn_id = FtpConnect();
+   
+   //* On analyse chaque demande de billets
    while ($rowBillet = mysqli_fetch_assoc($billets)) {
+         
          /**** Vérifier si le billet exist dans un premier temps */
          $NoBillet = $rowBillet["NumBillet"];
-         fwrite($myfile,"          Numérode Billet : $NoBillet \n");
+        
+         $EtatBillet = VerifeBillet($conn_id,$NoBillet,$TavailPour);
+         // $FileNotExist      = 0;
+         //$FileExistOK       = 1;
+         //$FileExistNotAuth  = 2;
+         switch ($EtatBillet) {
+            case 0:
+                $message = str_pad("Numérode Billet : ". str_pad($NoBillet, 6, " ") . " --->  Fichier inexistant", 60, " ", STR_PAD_LEFT);
+                fwrite($myfile, $message. "\n");
+                echo str_repeat('&nbsp;', 5) . $message . '<br>';
+                break;
+            case 1:
+                $message = str_pad("Numérode Billet : \t". str_pad($NoBillet, 6, " ") . " --->  Fichier existant", 60, " ", STR_PAD_LEFT);
+                $message = "Numérode Billet : ". str_pad($NoBillet, 6, " ") . " --->  Fichier existant";
+                fwrite($myfile,$message . "\n");
+                echo str_repeat('&nbsp;', 5) . $message . '<br>';
+                break;
+            case 2:
+                $message = str_pad("Numérode Billet : ". str_pad($NoBillet, 6, " ") . " --->  Fichier inaccessible pour le moment", 60, " ", STR_PAD_LEFT);
+                fwrite($myfile,$message . "\n");
+                echo str_repeat('&nbsp;', 5) . $message . '<br>' ; 
+                break;
+          }
+         
+         
+         
+         
   }
+  
+  //*** Close si FTP
   FtpClose($conn_id);
 
 }

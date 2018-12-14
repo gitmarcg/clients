@@ -17,20 +17,24 @@ function FtpConnect() {
 
 }
 
-function VerifeBillet($conn_id,$Billets) {
-        echo "Current directory is now: " . ftp_pwd($conn_id) . "<br>";
-         //  Récupération de la date de dernière modification
-       $file = $billet . "pdf";
+function VerifeBillet($conn_id,$Billet,$TavailPour) {
+       //Prépare les varibale de retour
+       $FileNotExist      = 0;
+       $FileExistOK       = 1;
+       $FileExistNotAuth  = 2;
+       
+       //* Ajout PDF au nom de fichier
+       $file = $Billet . ".pdf";
+       
        $buff = ftp_mdtm($conn_id, $file);
        if ($buff != -1) {
        // somefile.txt was last modified on: March 26 2003 14:16:41.
-       echo "$file a été modifié pour la dernière fois : " . date("F d Y H:i:s.", $buff);
-    
+       //echo "$file a été modifié pour la dernière fois : " . date("F d Y H:i:s.", $buff);
+           return $FileExistOK;   
        } else {
-         echo "Impossible de récupérer mdtime";
+         return $FileNotExist;
+        // echo "Impossible de récupérer mdtime";
        }
-        return;
-       
 }  
 
 
