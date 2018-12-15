@@ -97,7 +97,7 @@ while ($row = mysqli_fetch_assoc($result)) {
    $TavailPour = $rowMembre["NumClient"]; 
    //* On libère la mémoire 
    $membre->free();
-   $mail->setFrom($CourielMembre, $NomMembre);
+   $mail->setFrom($CourielMembre, "=?utf-8?b?". base64_encode($NomMembre)  ."?=");
    fwrite($myfile,"Nom demandeur : $NomMembre , Couriel : $CourielMembre \n");
    fwrite($myfile,"$LigneT \n"); 
    //Fin des information du demandeur
@@ -159,7 +159,7 @@ while ($row = mysqli_fetch_assoc($result)) {
                 $message = str_pad(str_pad("Numérode Billet : ". str_pad($NoBillet, 6, " ") . " --->  Fichier inexistant", 70, " ", STR_PAD_RIGHT),80, " ", STR_PAD_LEFT);
                 fwrite($myfile, $message. "\n");
                 //$message = str_repeat('&nbsp;', 5) . $message . '<br>';
-                $mail->Body =  $mail->Body . $message . "\r\n"; 
+                $mail->Body =  $mail->Body . $message . "<br>"; 
                 //echo $message;
                 break;
             case 1:
@@ -168,29 +168,30 @@ while ($row = mysqli_fetch_assoc($result)) {
                 //$message = str_repeat('&nbsp;', 5) . $message . '<br>';
                 $pdffile = $DirTarget . $NoBillet . ".pdf";
                 $mail->AddAttachment($pdffile);
-                $mail->Body =  $mail->Body . $message . "\r\n"; 
+                $mail->Body =  $mail->Body . $message . "<br>"; 
                 //echo $message;
                 break;
             case 2:
                 $message = str_pad(str_pad("Numérode Billet : ". str_pad($NoBillet, 6, " ") . " --->  Fichier inaccessible pour le moment", 70, " ", STR_PAD_RIGHT),80, " ", STR_PAD_LEFT);
                 fwrite($myfile,$message . "\n");
-                $mail->Body =  $mail->Body . $message . "\r\n"; 
+                $mail->Body =  $mail->Body . $message . "<br>"; 
                 //echo $message;
                 break;
             case 3:
                 $message = str_pad(str_pad("Numérode Billet : ". str_pad($NoBillet, 6, " ") . " --->  ERREUR Billet inexistant dans la DBA", 70, " ", STR_PAD_RIGHT),80, " ", STR_PAD_LEFT);
                 fwrite($myfile,$message . "\n");
-                $mail->Body =  $mail->Body . $message . "\r\n"; 
+                $mail->Body =  $mail->Body . $message . "<br>"; 
                 //echo $message;
                 break;    
             case 4:
                 $message = str_pad(str_pad("Numérode Billet : ". str_pad($NoBillet, 6, " ") . " --->  ERREUR COPY FTP FILE FAILED", 70, " ", STR_PAD_RIGHT),80, " ", STR_PAD_LEFT);
                 fwrite($myfile,$message . "\n");
-                $mail->Body =  $mail->Body . $message . "\r\n"; 
+                $mail->Body =  $mail->Body . $message . "<br>"; 
                 //echo $message;
                 break;                               
           }
     }
+   $mail->Body = '<h2>Voici , en fichier attacher, le(s) Billet(s) demandé et produit par notre système automatisé MCK<br></h2>' . "<br>".  $mail->Body . $mail->Pied ; 
    if (!$mail->send()) {
        fwrite($myfile,"Erreur - mailsend $mail->ErrorInfo.\n");
    }else{
@@ -198,6 +199,8 @@ while ($row = mysqli_fetch_assoc($result)) {
        // echo "Mail envoyer";
    }  
    $mail->clearAttachments(); 
+   // Remettre image de la signature
+   $mail->AddEmbeddedImage('images/logolongmck.png', 'logoimg', 'logo.jpg');
  // echo "mail.body <br>" . $mail->Body . "FIN <br>";
   
   //*** Close si FTP
