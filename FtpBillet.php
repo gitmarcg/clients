@@ -13,24 +13,49 @@ function FtpConnect() {
         
         // check if a file exist
         $path = "/"; //the path where the file is located
+        ftp_pasv($conn_id, true);
         return $conn_id;
 
 }
 
-function VerifeBillet($conn_id,$Billet,$TavailPour) {
+function VerifeBillet($conn,$conn_id,$Billet,$TavailPour) {
        //Prépare les varibale de retour
        $FileNotExist      = 0;
        $FileExistOK       = 1;
        $FileExistNotAuth  = 2;
+       $FileExistNotDBA   = 3;
+       $CopyFtpFailed     = 4;
        
        //* Ajout PDF au nom de fichier
        $file = $Billet . ".pdf";
        
        $buff = ftp_mdtm($conn_id, $file);
        if ($buff != -1) {
-       // somefile.txt was last modified on: March 26 2003 14:16:41.
-       //echo "$file a été modifié pour la dernière fois : " . date("F d Y H:i:s.", $buff);
-           return $FileExistOK;   
+          //*** Le fichier exist mais on vérifie si il appartient au client de la demande
+          //On ce connect à la database                                           
+          $sql = "SELECT * FROM servi271_McKinnon.Billets where NumBillet = '$Billet'";
+          $ReqBillet = mysqli_query($conn, $sql);                          
+          $nbrRow = mysqli_num_rows($ReqBillet);
+          if ($nbrRow == 0) {
+              return $FileExistNotDBA;
+          }
+          $sql = "SELECT * FROM servi271_McKinnon.Billets where NumBillet = '$Billet' and NumClient = '$TavailPour'";
+          $ReqBillet = mysqli_query($conn, $sql);                          
+          $nbrRow = mysqli_num_rows($ReqBillet);
+          $FileTarget = getcwd() . "\\Tempo\\" . $file ;
+          //echo $FileTarget;
+          if ($nbrRow == 1) {
+              // on copie le billets demander dans un répertoire local dans le but de l'ajouter a l'attachement
+              if (!ftp_get($conn_id, $FileTarget, $file, FTP_BINARY)) {
+                 return $CopyFtpFailed;                   
+              }
+              return $FileExistOK;
+          } else {
+              return  $FileExistNotAuth;
+          }
+          
+
+             
        } else {
          return $FileNotExist;
         // echo "Impossible de récupérer mdtime";

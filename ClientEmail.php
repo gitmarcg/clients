@@ -29,6 +29,7 @@ $mail->Host = 'smtp.gmail.com';
 $mail->Port = 587;
 //Set the encryption system to use - ssl (deprecated) or tls
 $mail->SMTPSecure = 'tls';
+//$mail->SMTPSecure = 'ssl';
 //Whether to use SMTP authentication
 $mail->SMTPAuth = true;
 //Username to use for SMTP authentication - use full email address for gmail
@@ -36,4 +37,6 @@ $mail->Username = "marc@servicesmckinnon.com";
 //Password to use for SMTP authentication
 $mail->Password = "pakel2018";
 $mail->addAddress('marc@servicesmckinnon.com', 'Marc Gagné');
+//$mail->SMTPAuth = false;
+//$mail->SMTPSecure = false;
 ?>

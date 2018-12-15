@@ -108,7 +108,7 @@ while ($row = mysqli_fetch_assoc($result)) {
    //*
 
    $sql = "SELECT * FROM servi271_McKinnon.Client where NumClient = '$NumClient'";
-   $client = mysqli_query($conn, $sql);;
+   $client = mysqli_query($conn, $sql);
    //if ((!$membre)  ||  (mysqli_num_rows($membre) == 0)  ||   (mysqli_num_rows($membre) > 1)){
    if ((!$client)){
        fwrite($myfile,"Erreur - SQLSTATE $client->sqlstate.\n");
@@ -119,8 +119,8 @@ while ($row = mysqli_fetch_assoc($result)) {
    $rowclient = mysqli_fetch_assoc($client);
    $NomClient = $rowMembre["NomClient"];
    
-   $mail->Subject = 'Demande de billets pour ' .$NomClient . ' par ' . $NomMembre .': ' . $CleDemande;  
-   echo $mail->Subject . '<br>'; 
+   $mail->Subject = utf8_decode('Demande de billets pour ' .$NomClient . ' par ' . $NomMembre .' : ' . $CleDemande);  
+   //echo $mail->Subject . '<br>'; 
    //Fin des information du demandeur
    //********************************************  
    
@@ -138,45 +138,73 @@ while ($row = mysqli_fetch_assoc($result)) {
    }
    //*** Connection si FTP
    $conn_id = FtpConnect();
-   
+   $StrMessage = "";
+   $mail->Body  = "";
    //* On analyse chaque demande de billets
+   $DirTarget = getcwd() . "\\Tempo\\";
    while ($rowBillet = mysqli_fetch_assoc($billets)) {
          
          /**** Vérifier si le billet exist dans un premier temps */
          $NoBillet = $rowBillet["NumBillet"];
         
-         $EtatBillet = VerifeBillet($conn_id,$NoBillet,$TavailPour);
-         // $FileNotExist      = 0;
-         //$FileExistOK       = 1;
-         //$FileExistNotAuth  = 2;
+         $EtatBillet = VerifeBillet($conn,$conn_id,$NoBillet,$TavailPour);
+        /* $FileNotExist      = 0;
+           $FileExistOK       = 1;
+           $FileExistNotAuth  = 2;
+           $FileExistNotDBA   = 3;
+           $CopyFtpFailed     = 4;
+         */  
          switch ($EtatBillet) {
             case 0:
-                $message = str_pad("Numérode Billet : ". str_pad($NoBillet, 6, " ") . " --->  Fichier inexistant", 60, " ", STR_PAD_LEFT);
+                $message = str_pad(str_pad("Numérode Billet : ". str_pad($NoBillet, 6, " ") . " --->  Fichier inexistant", 70, " ", STR_PAD_RIGHT),80, " ", STR_PAD_LEFT);
                 fwrite($myfile, $message. "\n");
-                echo str_repeat('&nbsp;', 5) . $message . '<br>';
+                //$message = str_repeat('&nbsp;', 5) . $message . '<br>';
+                $mail->Body =  $mail->Body . $message . "\r\n"; 
+                //echo $message;
                 break;
             case 1:
-                $message = str_pad("Numérode Billet : \t". str_pad($NoBillet, 6, " ") . " --->  Fichier existant", 60, " ", STR_PAD_LEFT);
-                $message = "Numérode Billet : ". str_pad($NoBillet, 6, " ") . " --->  Fichier existant";
+                $message = str_pad(str_pad("Numérode Billet : ". str_pad($NoBillet, 6, " ") . " --->  Fichier existant", 70, " ", STR_PAD_RIGHT),80, " ", STR_PAD_LEFT);
                 fwrite($myfile,$message . "\n");
-                echo str_repeat('&nbsp;', 5) . $message . '<br>';
+                //$message = str_repeat('&nbsp;', 5) . $message . '<br>';
+                $pdffile = $DirTarget . $NoBillet . ".pdf";
+                $mail->AddAttachment($pdffile);
+                $mail->Body =  $mail->Body . $message . "\r\n"; 
+                //echo $message;
                 break;
             case 2:
-                $message = str_pad("Numérode Billet : ". str_pad($NoBillet, 6, " ") . " --->  Fichier inaccessible pour le moment", 60, " ", STR_PAD_LEFT);
+                $message = str_pad(str_pad("Numérode Billet : ". str_pad($NoBillet, 6, " ") . " --->  Fichier inaccessible pour le moment", 70, " ", STR_PAD_RIGHT),80, " ", STR_PAD_LEFT);
                 fwrite($myfile,$message . "\n");
-                echo str_repeat('&nbsp;', 5) . $message . '<br>' ; 
+                $mail->Body =  $mail->Body . $message . "\r\n"; 
+                //echo $message;
                 break;
+            case 3:
+                $message = str_pad(str_pad("Numérode Billet : ". str_pad($NoBillet, 6, " ") . " --->  ERREUR Billet inexistant dans la DBA", 70, " ", STR_PAD_RIGHT),80, " ", STR_PAD_LEFT);
+                fwrite($myfile,$message . "\n");
+                $mail->Body =  $mail->Body . $message . "\r\n"; 
+                //echo $message;
+                break;    
+            case 4:
+                $message = str_pad(str_pad("Numérode Billet : ". str_pad($NoBillet, 6, " ") . " --->  ERREUR COPY FTP FILE FAILED", 70, " ", STR_PAD_RIGHT),80, " ", STR_PAD_LEFT);
+                fwrite($myfile,$message . "\n");
+                $mail->Body =  $mail->Body . $message . "\r\n"; 
+                //echo $message;
+                break;                               
           }
-         
-         
-         
-         
-  }
+    }
+   if (!$mail->send()) {
+       fwrite($myfile,"Erreur - mailsend $mail->ErrorInfo.\n");
+   }else{
+       fwrite($myfile,"Mail envoyer\n");
+       // echo "Mail envoyer";
+   }  
+   $mail->clearAttachments(); 
+ // echo "mail.body <br>" . $mail->Body . "FIN <br>";
   
   //*** Close si FTP
   FtpClose($conn_id);
 
 }
+
 
 
 
