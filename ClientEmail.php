@@ -34,7 +34,7 @@ $mail->Port = 587;
 $mail->SMTPSecure = 'tls';
 //$mail->SMTPSecure = 'ssl';
 //Whether to use SMTP authentication
-$mail->SMTPAuth = true;
+$mail->SMTPAuth = false;
 //Username to use for SMTP authentication - use full email address for gmail
 $mail->Username = "marc@servicesmckinnon.com";
 //Password to use for SMTP authentication

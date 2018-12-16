@@ -28,14 +28,15 @@ if ($NbrRows == 0){ header("Location: erreur.php?erreur="."005" ); exit;}
 // On va vérifier le mot de passe
 $sql = "SELECT * FROM servi271_McKinnon.membres where PseudoMembre='$Pseudo'";
 
-$request = mysqli_query($conn, $sql);
-$row = mysqli_fetch_assoc($request);
-$passe = $row['PasseMembre'] ;
-$NumMembre = $row['NumMembre'] ;
+$request    = mysqli_query($conn, $sql);
+$row        = mysqli_fetch_assoc($request);
+$passe      = $row['PasseMembre'] ;
+$NumMembre  = $row['NumMembre'] ;
 $NomMembre  = $row['NomMembre'] ; 
-$NumClient = $row['NumClient'] ;
-
+$NumClient  = $row['NumClient'] ;
+$MembreEtat = $row['MembreEtat'] ; 
 if ($passe != $mot){ header("Location: erreur.php?erreur="."003" ); exit;}
+if ($MembreEtat == "I") { header("Location: erreur.php?erreur="."007");exit;}
 
 //Vérifie si Pseudo existe  dans la data base
 $sql = "SELECT NomClient FROM servi271_McKinnon.Client where NumClient='NumClient'";

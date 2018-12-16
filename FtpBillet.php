@@ -63,11 +63,6 @@ function VerifeBillet($conn,$conn_id,$Billet,$TavailPour) {
 }  
 
 
-Function AddPeidPage ($signature) {
-
-
-}
-
 function Ftpclose($conn_id) {
     ftp_close($conn_id);
 }        

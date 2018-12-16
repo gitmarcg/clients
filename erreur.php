@@ -28,7 +28,10 @@
              break;   
              case '006':
                 echo ' 006 - Le numéro de client n\'est pas valide ou inexistant ! <br/>';
-             break;                    
+             break;  
+             case '007':
+                echo ' 007 - Votre compte n\'est pas encore activé par notre technique <br/>';
+             break;                  
              default:
              echo 'Erreur !';
           }
