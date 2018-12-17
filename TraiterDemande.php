@@ -13,7 +13,33 @@ $conn = OpenCon();
 
 date_default_timezone_set('America/Toronto');
 $date = date("Y-m-d_His");
-$myfile = fopen("log/$date.txt", "w");
+$pathCurent = getcwd();
+$findme   = 'servi271';
+//***** Vére si on est sur un serveur Linus ou windows pour le path
+$pos = strpos($pathCurent, $findme);
+if ($pos == false) {
+    list($scriptPath) = get_included_files();
+    $pos      = strripos($scriptPath, "\\");
+    $pathCurent = substr($scriptPath,0,$pos+1);
+    $DirLogFile = $pathCurent . "log\\$date.txt";
+    $DirTempoFile = $pathCurent . "Tempo\\";
+} else {
+    list($scriptPath) = get_included_files();
+    $pos      = strripos($scriptPath, "/");
+    $pathCurent = substr($scriptPath,0,$pos+1);
+    $DirLogFile = $pathCurent . "log/$date.txt";
+    $DirTempoFile = $pathCurent . "Tempo/";
+    echo  "$DirLogFile   : " . $DirLogFile ;
+    echo  "$DirTempoFile : " . $DirTempoFile ;
+}
+ 
+$myfile = fopen($DirLogFile, "w");
+if (!$myfile) {
+  echo "erreur erreur ";
+  echo $DirFile . "\n";
+  exit;
+}
+
 fwrite($myfile, $LigneE);
 $txt = "************************************* DEBUT ************************************\n";
 fwrite($myfile, $txt);
@@ -119,7 +145,9 @@ while ($row = mysqli_fetch_assoc($result)) {
    $rowclient = mysqli_fetch_assoc($client);
    $NomClient = $rowMembre["NomClient"];
    
-   $mail->Subject = utf8_decode('Demande de billets pour ' .$NomClient . ' par ' . $NomMembre .' : ' . $CleDemande);  
+   $sujet = 'Demande de billets pour ' .$NomClient . ' par ' . $NomMembre .' : ' . $CleDemande;
+   $mail->Subject = "=?utf-8?b?". base64_encode($sujet)  ."?=";  
+   //$mail->Subject = "Demande de billetssss pour " .$NomClient . " par " . $NomMembre . " :  " . $CleDemande;
    //echo $mail->Subject . '<br>'; 
    //Fin des information du demandeur
    //********************************************  
@@ -141,13 +169,13 @@ while ($row = mysqli_fetch_assoc($result)) {
    $StrMessage = "";
    $mail->Body  = "";
    //* On analyse chaque demande de billets
-   $DirTarget = getcwd() . "\\Tempo\\";
+   
    while ($rowBillet = mysqli_fetch_assoc($billets)) {
          
          /**** Vérifier si le billet exist dans un premier temps */
          $NoBillet = $rowBillet["NumBillet"];
         
-         $EtatBillet = VerifeBillet($conn,$conn_id,$NoBillet,$TavailPour);
+         $EtatBillet = VerifeBillet($conn,$conn_id,$NoBillet,$TavailPour,$DirTempoFile);
         /* $FileNotExist      = 0;
            $FileExistOK       = 1;
            $FileExistNotAuth  = 2;
@@ -166,7 +194,7 @@ while ($row = mysqli_fetch_assoc($result)) {
                 $message = str_pad(str_pad("Numérode Billet : ". str_pad($NoBillet, 6, " ") . " --->  Fichier existant", 70, " ", STR_PAD_RIGHT),80, " ", STR_PAD_LEFT);
                 fwrite($myfile,$message . "\n");
                 //$message = str_repeat('&nbsp;', 5) . $message . '<br>';
-                $pdffile = $DirTarget . $NoBillet . ".pdf";
+                $pdffile = $DirTempoFile . $NoBillet . ".pdf";
                 $mail->AddAttachment($pdffile);
                 $mail->Body =  $mail->Body . $message . "<br>"; 
                 //echo $message;
@@ -201,9 +229,8 @@ while ($row = mysqli_fetch_assoc($result)) {
    $mail->clearAttachments(); 
        
     //The name of the folder.
-    $folder = getcwd() . "\\Tempo\\" ;
     //Get a list of all of the file names in the folder.
-    $files = glob($folder . '/*');
+    $files = glob($DirTempoFile . '*');
      
     //Loop through the file list.
     foreach($files as $file){
@@ -211,13 +238,13 @@ while ($row = mysqli_fetch_assoc($result)) {
         if(is_file($file)){
             //Use the unlink function to delete the file.
             unlink($file);
-
+            //echo "Delete File " . $file; 
         }
     }
    // Remettre image de la signature
    $mail->AddEmbeddedImage('images/logolongmck.png', 'logoimg', 'logo.jpg');
  // echo "mail.body <br>" . $mail->Body . "FIN <br>";
-  
+  CloseDemande( $CleDemande );
   //*** Close si FTP
   FtpClose($conn_id);
 

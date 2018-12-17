@@ -15,13 +15,13 @@ date_default_timezone_set('America/Toronto');
 $mail     = new PHPMailer();
 
 $mail->IsHTML(true);
-//$mail->CharSet = "text/html; charset=UTF-8;";
+$mail->CharSet = "text/html; charset=UTF-8;";
 $mail->isSMTP();
 //Enable SMTP debugging
 // 0 = off (for production use)
 // 1 = client messages
 // 2 = client and server messages
-$mail->SMTPDebug = 3;
+$mail->SMTPDebug = 0;
 //Set the hostname of the mail server
 $mail->Host = 'smtp.gmail.com';
 //$mail->Host = "ssl://smtp.gmail.com";
@@ -42,7 +42,7 @@ $mail->SMTPAuth = true;
 $mail->Username = "marc@servicesmckinnon.com";
 //Password to use for SMTP authentication
 $mail->Password = "pakel2018";
-$mail->addAddress('marc@servicesmckinnon.com', 'Marc Gagné');
+$mail->addAddress('marc@servicesmckinnon.com', "=?utf-8?b?". base64_encode("Marc Gagné")  ."?=");
 $mail->AddEmbeddedImage('images/logolongmck.png', 'logoimg', 'logo.jpg'); // attach file logo.jpg, and later link to it using identfier logoimg
 $mail->Pied = "<p>Téléphone : (581) 742-1222 <br>  
        Télécopie : (418-914-7045 <br>

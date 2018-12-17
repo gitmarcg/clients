@@ -18,7 +18,7 @@ function FtpConnect() {
 
 }
 
-function VerifeBillet($conn,$conn_id,$Billet,$TavailPour) {
+function VerifeBillet($conn,$conn_id,$Billet,$TavailPour,$TempoPath) {
        //Prépare les varibale de retour
        $FileNotExist      = 0;
        $FileExistOK       = 1;
@@ -42,7 +42,7 @@ function VerifeBillet($conn,$conn_id,$Billet,$TavailPour) {
           $sql = "SELECT * FROM servi271_McKinnon.Billets where NumBillet = '$Billet' and NumClient = '$TavailPour'";
           $ReqBillet = mysqli_query($conn, $sql);                          
           $nbrRow = mysqli_num_rows($ReqBillet);
-          $FileTarget = getcwd() . "\\Tempo\\" . $file ;
+          $FileTarget = $TempoPath . $file ;
           //echo $FileTarget;
           if ($nbrRow == 1) {
               // on copie le billets demander dans un répertoire local dans le but de l'ajouter a l'attachement
