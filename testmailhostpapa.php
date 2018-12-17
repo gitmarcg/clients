@@ -25,7 +25,9 @@ $mail->SMTPDebug = 3;
 //Set the hostname of the mail server
 $mail->Host = 'smtp.gmail.com';
 //$mail->Host = "ssl://smtp.gmail.com";
-
+$CourielMembre = "marc@servicesmckinnon.com";
+$NomMembre = "Marc Gagné local";
+$mail->setFrom($CourielMembre, "=?utf-8?b?". base64_encode($NomMembre)  ."?=");
 // use
 // $mail->Host = gethostbyname('smtp.gmail.com'); 
 // if your network does not support SMTP over IPv6
@@ -33,7 +35,7 @@ $mail->Host = 'smtp.gmail.com';
 //$mail->SMTPSecure = 'ssl';
 //$mail->Port = 465;        
 //Set the encryption system to use - ssl (deprecated) or tls
-//$mail->SMTPSecure = 'tls';
+$mail->SMTPSecure = 'tls';
 $mail->Port = 587;
 //$mail->SMTPSecure = 'ssl';
 //Whether to use SMTP authentication
@@ -44,9 +46,14 @@ $mail->Username = "marc@servicesmckinnon.com";
 $mail->Password = "pakel2018";
 $mail->addAddress('marc@servicesmckinnon.com', 'Marc Gagné');
 $mail->AddEmbeddedImage('images/logolongmck.png', 'logoimg', 'logo.jpg'); // attach file logo.jpg, and later link to it using identfier logoimg
-$mail->Pied = "<p>Téléphone : (581) 742-1222 <br>  
-       Télécopie : (418-914-7045 <br>
-    <img src=\"cid:logoimg\" /></p>";
 //$mail->SMTPAuth = false;
 //$mail->SMTPSecure = false;
+$mail->Body = '<h2>Voici , un test d\'envoie du serveur VPS avec hostpapa <br></h2>' . "<br>".  $mail->Body ; 
+if (!$mail->send()) {
+       //fwrite($myfile,"Erreur - mailsend $mail->ErrorInfo.\n");
+       echo "------------------------------- Erreur ----------------------------";
+   }else{
+       //fwrite($myfile,"Mail envoyer\n");
+       echo "Mail envoyer";
+   }
 ?>

@@ -137,7 +137,7 @@ while ($row = mysqli_fetch_assoc($result)) {
       continue;
    }
    //*** Connection si FTP
-   $conn_id = FtpConnect();
+   $conn_id = FtpConnect();  
    $StrMessage = "";
    $mail->Body  = "";
    //* On analyse chaque demande de billets
@@ -190,7 +190,7 @@ while ($row = mysqli_fetch_assoc($result)) {
                 //echo $message;
                 break;                               
           }
-    }
+    }     
    $mail->Body = '<h2>Voici , en fichier attacher, le(s) Billet(s) demandé et produit par notre système automatisé MCK<br></h2>' . "<br>".  $mail->Body . $mail->Pied ; 
    if (!$mail->send()) {
        fwrite($myfile,"Erreur - mailsend $mail->ErrorInfo.\n");
@@ -211,6 +211,7 @@ while ($row = mysqli_fetch_assoc($result)) {
         if(is_file($file)){
             //Use the unlink function to delete the file.
             unlink($file);
+
         }
     }
    // Remettre image de la signature
