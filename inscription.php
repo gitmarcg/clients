@@ -36,7 +36,7 @@ if(isset($_POST['PseudoMembre'],$_POST['PasseMembre'])){//l'utilisateur à cliqu
     } elseif(mysqli_num_rows(mysqli_query($conn,"SELECT * FROM servi271_McKinnon.membres WHERE PseudoMembre='".$_POST['PseudoMembre']."'"))==1){//on vérifie que ce pseudo n'est pas déjà utilisé par un autre membre
         echo "Ce pseudo est déjà utilisé.";
     } else {
-    echo 'test5';                                                                                                                  
+                                                                                                                
         //toutes les vérifications sont faites, on passe à l'enregistrement dans la base de données:
         //Bien évidement il s'agit là d'un script simplifié au maximum, libre à vous de rajouter des conditions avant l'enregistrement comme la longueur minimum du mot de passe par exemple
         $SqlInsert = "INSERT INTO servi271_McKinnon.membres set PseudoMembre='".$_POST['PseudoMembre']."',NomMembre ='".$_POST['NomMembre']."',PasseMembre ='".sha1($_POST['PasseMembre'])."',NomClient ='".$_POST['NomClient']."',CourielMembre ='".$_POST['CourielMembre']."'";
@@ -44,17 +44,13 @@ if(isset($_POST['PseudoMembre'],$_POST['PasseMembre'])){//l'utilisateur à cliqu
         if(!mysqli_query($conn,$SqlInsert)){//on crypte le mot de passe avec la fonction propre à PHP: md5()
             echo "Une erreur s'est produite: ".mysqli_error($conn);//je conseille de ne pas afficher les erreurs aux visiteurs mais de l'enregistrer dans un fichier log
         } else {
-           echo 'test1';
            $_SESSION['PseudoMembre']=$_POST['PseudoMembre'];
            $_SESSION['NomClient']=$_POST['NomClient']; 
            $_SESSION['NomMembre']=$_POST['NomMembre'];
            $_SESSION['CourielMembre']=$_POST['CourielMembre'];
-          echo 'testwwwwwwwwwwwwwwwwwwwwwwwwwwww';
-          $pathCurent = getcwd();
-          echo   $pathCurent;
-          header('location: MessageBienvenue.php');
-          exit;   
-            $AfficherFormulaire=0;
+           $pathCurent = getcwd();
+           header('location: MessageBienvenue.php');
+           $AfficherFormulaire=0;
             
         }
     }
