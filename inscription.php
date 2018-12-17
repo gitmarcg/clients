@@ -1,8 +1,11 @@
 <meta charset="UTF-8" />
 
 <?php
+ob_start();
+session_start(); // On démarre la session AVANT toute chose
      
 include 'connect.php';
+
 
 //On ce connect à la database                                           
 $conn = OpenCon();
@@ -14,8 +17,6 @@ $conn = OpenCon();
     //champ "mdp": en char fixe de 32 caractères, soit la longueur de la fonction md5()
     //fin création automatique
 
-
- 
 //par défaut, on affiche le formulaire (quand il validera le formulaire sans erreur avec l'inscription validée, on l'affichera plus)
 $AfficherFormulaire=1;
 //traitement du formulaire:
@@ -42,7 +43,11 @@ if(isset($_POST['PseudoMembre'],$_POST['PasseMembre'])){//l'utilisateur à cliqu
         if(!mysqli_query($conn,$SqlInsert)){//on crypte le mot de passe avec la fonction propre à PHP: md5()
             echo "Une erreur s'est produite: ".mysqli_error($conn);//je conseille de ne pas afficher les erreurs aux visiteurs mais de l'enregistrer dans un fichier log
         } else {
-            echo "Vous êtes inscrit avec succès!"; 
+           $_SESSION['PseudoMembre']=$_POST['PseudoMembre'];
+           $_SESSION['NomClient']=$_POST['NomClient']; 
+           $_SESSION['NomMembre']=$_POST['NomMembre'];
+           $_SESSION['CourielMembre']=$_POST['CourielMembre'];
+           header("Location: MessageBienvenue.php"); 
             
             //on affiche plus le formulaire
             $AfficherFormulaire=0;

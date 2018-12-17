@@ -5,6 +5,8 @@ include 'connect.php';
 include 'ClientEmail.php';
 include 'FtpBillet.php';
 
+
+
 $LigneT = str_repeat("-", 79) . "\n";
 $LigneE = str_repeat("*", 79) . "\n";
 
@@ -19,18 +21,18 @@ $findme   = 'servi271';
 $pos = strpos($pathCurent, $findme);
 if ($pos == false) {
     list($scriptPath) = get_included_files();
-    $pos      = strripos($scriptPath, "\\");
-    $pathCurent = substr($scriptPath,0,$pos+1);
-    $DirLogFile = $pathCurent . "log\\$date.txt";
+    $pos          = strripos($scriptPath, "\\");
+    $pathCurent   = substr($scriptPath,0,$pos+1);
+    $DirLogFile   = $pathCurent . "log\\$date.txt";
     $DirTempoFile = $pathCurent . "Tempo\\";
+    $DirInitFile  = $pathCurent . "securite\\";
 } else {
     list($scriptPath) = get_included_files();
     $pos      = strripos($scriptPath, "/");
     $pathCurent = substr($scriptPath,0,$pos+1);
     $DirLogFile = $pathCurent . "log/$date.txt";
     $DirTempoFile = $pathCurent . "Tempo/";
-    echo  "$DirLogFile   : " . $DirLogFile ;
-    echo  "$DirTempoFile : " . $DirTempoFile ;
+    $DirInitFile  = $pathCurent . "securite/";
 }
  
 $myfile = fopen($DirLogFile, "w");
@@ -39,6 +41,9 @@ if (!$myfile) {
   echo $DirFile . "\n";
   exit;
 }
+
+$ini_file = parse_ini_file($DirInitFile . "Clients.ini");
+
 
 fwrite($myfile, $LigneE);
 $txt = "************************************* DEBUT ************************************\n";
