@@ -1,54 +1,23 @@
 <?php
 ob_start();
 session_start(); // On démarre la session AVANT toute chose
+include 'config.php';
 include 'connect.php';
-
 include 'FtpBillet.php';
-
-
+include 'ClientEmail.php';
 
 $LigneT = str_repeat("-", 79) . "\n";
 $LigneE = str_repeat("*", 79) . "\n";
 
 //On ce connect à la database                                           
-$conn = OpenCon();
+$conn = OpenCon($servername, $username, $password, $dbname);
 
-date_default_timezone_set('America/Toronto');
-$date = date("Y-m-d_His");
-$pathCurent = getcwd();
-$findme   = 'servi271';
-//***** Vére si on est sur un serveur Linus ou windows pour le path
-$pos = strpos($pathCurent, $findme);
-if ($pos == false) {
-    list($scriptPath) = get_included_files();
-    $pos          = strripos($scriptPath, "\\");
-    $pathCurent   = substr($scriptPath,0,$pos+1);
-    $DirLogFile   = $pathCurent . "log\\$date.txt";
-    $DirTempoFile = $pathCurent . "Tempo\\";
-    $DirInitFile  = $pathCurent . "securite\\";
-    $DirImage     = $pathCurent . "images\\";
-} else {
-    list($scriptPath) = get_included_files();
-    $pos      = strripos($scriptPath, "/");
-    $pathCurent = substr($scriptPath,0,$pos+1);
-    $DirLogFile = $pathCurent . "log/$date.txt";
-    $DirTempoFile = $pathCurent . "Tempo/";
-    $DirInitFile  = $pathCurent . "securite/";
-    $DirImage     = $pathCurent . "images/";
-}
-
-include 'ClientEmail.php';
-
- 
 $myfile = fopen($DirLogFile, "w");
 if (!$myfile) {
   echo "erreur erreur ";
   echo $DirFile . "\n";
   exit;
 }
-
-$ini_file = parse_ini_file($DirInitFile . "Clients.ini");
-
 
 fwrite($myfile, $LigneE);
 $txt = "************************************* DEBUT ************************************\n";

@@ -2,6 +2,7 @@
 ob_start();
 session_start(); // On démarre la session AVANT toute chose
 
+include 'config.php';
 
 include 'connect.php';
 
@@ -13,7 +14,7 @@ $mot = sha1($_POST['passe']);
 if(empty($Pseudo)){ header("Location: erreur.php?erreur="."002" );exit;}
 
 //On ce connect à la database                                           
-$conn = OpenCon();
+$conn = OpenCon($servername, $username, $password, $dbname);
 
 //Vérifie si Pseudo existe  dans la data base
 $sql = "SELECT count(*) as somme FROM servi271_McKinnon.membres where PseudoMembre='$Pseudo'";

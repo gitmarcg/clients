@@ -1,6 +1,7 @@
 <?php
 ob_start();
 session_start(); // On démarre la session AVANT toute chose
+include 'config.php';
 
 if (!isset($_SESSION['ouvert'])) 
 {
@@ -9,7 +10,7 @@ if (!isset($_SESSION['ouvert']))
 }
 include 'connect.php';
 //On ce connect à la database                                           
-$conn = OpenCon();
+$conn = OpenCon($servername, $username, $password, $dbname);
 
 $NumMembre = $_GET['id'];
 $action = $_GET['action'];

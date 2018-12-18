@@ -1,10 +1,11 @@
 <?php
 ob_start();
 session_start(); // On démarre la session AVANT toute chose
+include 'config.php';
 
 include 'connect.php';
 //On ce connect à la database                                           
-$conn = OpenCon();
+$conn = OpenCon($servername, $username, $password, $dbname);
 
 //Crééer une clé unique
 $keys = uniqid();
