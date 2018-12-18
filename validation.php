@@ -37,6 +37,8 @@ $NumClient  = $row['NumClient'] ;
 $MembreEtat = $row['MembreEtat'] ; 
 if ($passe != $mot){ header("Location: erreur.php?erreur="."003" ); exit;}
 if ($MembreEtat == "I") { header("Location: erreur.php?erreur="."007");exit;}
+echo "NumClient = $NumClient";
+if (!$NumClient) { header("Location: erreur.php?erreur="."008");exit;}  
 
 //Vérifie si Pseudo existe  dans la data base
 $sql = "SELECT NomClient FROM servi271_McKinnon.Client where NumClient='NumClient'";

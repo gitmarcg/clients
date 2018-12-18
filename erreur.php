@@ -30,7 +30,10 @@
                 echo ' 006 - Le numéro de client n\'est pas valide ou inexistant ! <br/>';
              break;  
              case '007':
-                echo ' 007 - Votre compte n\'est pas encore activé par notre technique <br/>';
+                echo ' 007 - Votre compte n\'est pas encore activé par notre servcice technique <br/>';
+             break; 
+              case '008':
+                echo ' 008 - Attention votre compte n\'a pas de Numéro de compagnie attribuer par notre servcice technique <br/>';
              break;                  
              default:
              echo 'Erreur !';

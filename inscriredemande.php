@@ -41,7 +41,7 @@ foreach($fields as $f)
 
 $_SESSION['CleDemande'] = $keys;
 
-header("Location: confDemande.php");
+header("Location: ConfDemande.php");
 exit;
 
 ?>
