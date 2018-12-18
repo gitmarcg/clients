@@ -2,7 +2,7 @@
 ob_start();
 session_start(); // On démarre la session AVANT toute chose
 include 'connect.php';
-include 'ClientEmail.php';
+
 include 'FtpBillet.php';
 
 
@@ -26,6 +26,7 @@ if ($pos == false) {
     $DirLogFile   = $pathCurent . "log\\$date.txt";
     $DirTempoFile = $pathCurent . "Tempo\\";
     $DirInitFile  = $pathCurent . "securite\\";
+    $DirImage     = $pathCurent . "images\\";
 } else {
     list($scriptPath) = get_included_files();
     $pos      = strripos($scriptPath, "/");
@@ -33,7 +34,11 @@ if ($pos == false) {
     $DirLogFile = $pathCurent . "log/$date.txt";
     $DirTempoFile = $pathCurent . "Tempo/";
     $DirInitFile  = $pathCurent . "securite/";
+    $DirImage     = $pathCurent . "images/";
 }
+
+include 'ClientEmail.php';
+
  
 $myfile = fopen($DirLogFile, "w");
 if (!$myfile) {
@@ -128,7 +133,12 @@ while ($row = mysqli_fetch_assoc($result)) {
    $TavailPour = $rowMembre["NumClient"]; 
    //* On libère la mémoire 
    $membre->free();
-   $mail->setFrom($CourielMembre, "=?utf-8?b?". base64_encode($NomMembre)  ."?=");
+ 
+   $mail->addAddress($CourielMembre, "=?utf-8?b?". base64_encode($NomMembre)  ."?=");
+   
+   //$mail->setFrom('marc@servicesmckinon.com', 'Marcccc');
+   //$mail->addAddress('pmkatelier@gmail.com', 'Pkmatelier');
+   
    fwrite($myfile,"Nom demandeur : $NomMembre , Couriel : $CourielMembre \n");
    fwrite($myfile,"$LigneT \n"); 
    //Fin des information du demandeur
@@ -231,6 +241,8 @@ while ($row = mysqli_fetch_assoc($result)) {
        fwrite($myfile,"Mail envoyer\n");
        // echo "Mail envoyer";
    }  
+   
+   $mail->ClearAddresses();  // each AddAddress add to list
    $mail->clearAttachments(); 
        
     //The name of the folder.
@@ -247,7 +259,7 @@ while ($row = mysqli_fetch_assoc($result)) {
         }
     }
    // Remettre image de la signature
-   $mail->AddEmbeddedImage('images/logolongmck.png', 'logoimg', 'logo.jpg');
+   $mail->AddEmbeddedImage($DirImage . 'logolongmck.png', 'logoimg', 'logo.jpg');
  // echo "mail.body <br>" . $mail->Body . "FIN <br>";
   CloseDemande( $CleDemande );
   //*** Close si FTP

@@ -24,26 +24,18 @@ $mail->isSMTP();
 $mail->SMTPDebug = 0;
 //Set the hostname of the mail server
 $mail->Host = 'smtp.gmail.com';
-//$mail->Host = "ssl://smtp.gmail.com";
-
-// use
-// $mail->Host = gethostbyname('smtp.gmail.com'); 
-// if your network does not support SMTP over IPv6
-//Set the SMTP port number - 587 for authenticated TLS, a.k.a. RFC4409 SMTP submission
-//$mail->SMTPSecure = 'ssl';
-//$mail->Port = 465;        
-//Set the encryption system to use - ssl (deprecated) or tls
-//$mail->SMTPSecure = 'tls';
 $mail->Port = 587;
 //$mail->SMTPSecure = 'ssl';
 //Whether to use SMTP authentication
 $mail->SMTPAuth = true;
 //Username to use for SMTP authentication - use full email address for gmail
-$mail->Username = "marc@servicesmckinnon.com";
+//$mail->Username = "marc@servicesmckinnon.com";
+$mail->Username = "noreply@servicesmckinnon.com";
 //Password to use for SMTP authentication
-$mail->Password = "pakel2018";
-$mail->addAddress('marc@servicesmckinnon.com', "=?utf-8?b?". base64_encode("Marc Gagné")  ."?=");
-$mail->AddEmbeddedImage('images/logolongmck.png', 'logoimg', 'logo.jpg'); // attach file logo.jpg, and later link to it using identfier logoimg
+$mail->Password = "NoReply2019";
+$mail->setFrom($mail->Username, "No Reply");
+$mail->AddEmbeddedImage($DirImage . 'logolongmck.png', 'logoimg', 'logo.jpg');
+//$mail->AddEmbeddedImage('images/logolongmck.png', 'logoimg', 'logo.jpg'); // attach file logo.jpg, and later link to it using identfier logoimg
 $mail->Pied = "<p>Téléphone : (581) 742-1222 <br>  
        Télécopie : (418-914-7045 <br>
     <img src=\"cid:logoimg\" /></p>";
