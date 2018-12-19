@@ -203,7 +203,7 @@ while ($row = mysqli_fetch_assoc($result)) {
                 break;                               
           }
     }     
-   $mail->Body = '<h2>Voici , en fichier attaché, le(s) billet(s) demandé(s) et produit par notre système automatisé MCK<br></h2>' . "<br>".  $mail->Body . $mail->Pied ; 
+   $mail->Body = '<h2>Voici, en fichier attaché, le(s) billet(s) demandé(s) et produit par notre système automatisé MCK<br></h2>' . "<br>".  $mail->Body . $mail->Pied ; 
    if (!$mail->send()) {
        fwrite($myfile,"Erreur - mailsend $mail->ErrorInfo.\n");
    }else{
