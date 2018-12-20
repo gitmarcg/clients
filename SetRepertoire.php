@@ -1,26 +1,20 @@
 <?php
-
-$pathCurent = getcwd();
-$findme   = 'servi271';
-//***** Vére si on est sur un serveur Linus ou windows pour le path
-$pos = strpos($pathCurent, $findme);
-if ($pos == false) {
     list($scriptPath) = get_included_files();
-    $pos          = strripos($scriptPath, "\\");
+    $pos          = strripos($scriptPath, DIRECTORY_SEPARATOR);
     $pathCurent   = substr($scriptPath,0,$pos+1);
-    $DirLogFile   = $pathCurent . "log\\$date.txt";
-    $DirTempoFile = $pathCurent . "Tempo\\";
-    $DirSecurite  = $pathCurent . "securite\\";
-    $DirImage     = $pathCurent . "images\\";
-} else {
-    list($scriptPath) = get_included_files();
-    $pos      = strripos($scriptPath, "/");
-    $pathCurent = substr($scriptPath,0,$pos+1);
-    $DirLogFile = $pathCurent . "log/$date.txt";
-    $DirTempoFile = $pathCurent . "Tempo/";
-    $DirSecurite  = $pathCurent . "securite/";
-    $DirImage     = $pathCurent . "images/";
-}
+    $DirLog       = $pathCurent . "log"      . DIRECTORY_SEPARATOR; 
+    $DirTempoFile = $pathCurent . "Tempo"    . DIRECTORY_SEPARATOR;
+    $DirSecurite  = $pathCurent . "securite" . DIRECTORY_SEPARATOR;
+    $DirImage     = $pathCurent . "images"   . DIRECTORY_SEPARATOR;
+
+/*echo PHP_OS;
+echo DIRECTORY_SEPARATOR;
+echo $DirLogFile   . '<br>';
+echo $DirTempoFile . '<br>';
+echo $DirSecurite  . '<br>';
+echo $DirImage     . '<br>';
+exit;*/
+
 ?>
 
 

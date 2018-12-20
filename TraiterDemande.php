@@ -12,9 +12,10 @@ $LigneE = str_repeat("*", 79) . "\n";
 //On ce connect à la database                                           
 $conn = OpenCon($servername, $username, $password, $dbname);
 
+$DirLogFile =  $DirLog . $date . 'txt';
 $myfile = fopen($DirLogFile, "w");
 if (!$myfile) {
-  echo "erreur erreur ";
+  echo "Erreur de création du fichier de log dans TraiterDemande.php";
   echo $DirFile . "\n";
   exit;
 }
