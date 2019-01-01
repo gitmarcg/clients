@@ -1,4 +1,13 @@
 <?php
+/*
+<-- /home/servi271/public_html/new2/clients/TraiterDemande.php --->
+
+Programme est appeler par un cronjob ce qui vérfie dans al database si on eu des demandes
+Ensuite analyses ces demandes et dans le cas que tout est ok envoie les billets
+demander aux utilisateurs (demandeurs)
+*/
+
+
 ob_start();
 session_start(); // On démarre la session AVANT toute chose
 include 'config.php';
