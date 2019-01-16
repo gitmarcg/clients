@@ -46,7 +46,7 @@ CloseCon($conn) ;
   <a class="rigth" href="clients.php?id=$NumMembre&action=logout";">Déconnexion</a>
 </div>
   <fieldset  style="width:950px;">
-        <legend style="text-align:center" >Entrez les numéros de billets (Maximum 10)  </legend>
+        <legend style="text-align:center;color:white" >Entrez les numéros de billets (Maximum 10)  </legend>
         <form action="inscriredemande.php" method="post" class="form-signin">
         <?php
            $x = 1; 
