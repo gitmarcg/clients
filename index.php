@@ -30,7 +30,8 @@ if (isset($_COOKIE['cookie']))
 
     <div class="container">
         <div class="card card-container">
-            <img id="profile-img" class="profile-img-card" src="images/LogoMx75x59.jpg?sz=120" alt="" /> 
+        <img id="profile-img" class="profile-img-card" src="images/LogoLong.jpg?sz=5000" alt="" /> 
+           <!-- <img id="profile-img" class="profile-img-card" src="images/LogoMx75x59.jpg?sz=120" alt="" />   --> 
             <!-- <img id="profile-img" class="profile-img-card" src="//ssl.gstatic.com/accounts/ui/avatar_2x.png" />' --> 
             <p id="profile-name" class="profile-name-card"></p>
             <form action="validation.php" method="post" class="form-signin">
