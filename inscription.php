@@ -1,14 +1,13 @@
 <?php
 ob_start();
 session_start(); // On démarre la session AVANT toute chose
-
-
-     
+include 'config.php';
+   
 include 'connect.php';
 
 
 //On ce connect à la database                                           
-$conn = OpenCon();
+$conn =  OpenCon($servername, $username, $password, $dbname);
  
     
     //la table est créée avec les paramètres suivants:
