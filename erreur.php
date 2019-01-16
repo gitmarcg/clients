@@ -7,7 +7,7 @@
 <body>
     <div class="container">
         <div class="card card-container">
-        <img id="profile-img" class="profile-img-card" src="images/LogoMx75x59.jpg?sz=120" alt="" />
+        <img id="profile-img" class="profile-img-card" src="images/LogoLong.jpg?sz=120" alt="" />
           <?php
           switch($_GET['erreur'])
           {
