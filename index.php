@@ -50,9 +50,9 @@ if (isset($_COOKIE['cookie']))
                 <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit">Connexion</button>
             </form><!-- /form -->
             
-            <a href="#" class="forgot-password">
+           <!-- <a href="#" class="forgot-password">
                 Mot de passe Oublié ? <br/>
-            </a>
+            </a>   -->
             <a href="inscription.php" class="forgot-password">
                 S'inscrire         <br/>
             </a>
