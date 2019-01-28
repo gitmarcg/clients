@@ -10,10 +10,12 @@ demander aux utilisateurs (demandeurs)
 
 ob_start();
 session_start(); // On démarre la session AVANT toute chose
+incluse 'SetRepertoire.php';
 include 'config.php';
 include 'connect.php';
 include 'FtpBillet.php';
 include 'ClientEmail.php';
+
 
 $LigneT = str_repeat("-", 79) . "\n";
 $LigneE = str_repeat("*", 79) . "\n";
