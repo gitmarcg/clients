@@ -3,6 +3,7 @@
  * This example shows how to use a callback function from PHPMailer.
  */
 include 'SetRepertoire.php';
+
 include  $PHPMailer . "/src/PHPMailer.php";
 include  $PHPMailer . "/src/SMTP.php";
 include  $PHPMailer . "/src/Exception.php";
