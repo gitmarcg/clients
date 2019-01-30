@@ -5,8 +5,7 @@
     $DirLog       = $pathCurent . "log"      . DIRECTORY_SEPARATOR; 
     $DirTempoFile = $pathCurent . "Tempo"    . DIRECTORY_SEPARATOR;
     $DirSecurite  = $pathCurent . "securite" . DIRECTORY_SEPARATOR;
-    $DirImage     = $pathCurent . "images"   . DIRECTORY_SEPARATOR;
-    $PHPMailer    = ".." . DIRECTORY_SEPARATOR . "PHPMailer". DIRECTORY_SEPARATOR; 
+    $DirImage     = $pathCurent . "images"   . DIRECTORY_SEPARATOR; 
 
 /*echo PHP_OS;
 echo DIRECTORY_SEPARATOR;

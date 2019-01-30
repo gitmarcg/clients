@@ -1,14 +1,15 @@
-<?php                                            
+<?php                                                                                  
 /**
  * This example shows how to use a callback function from PHPMailer.
  */
 include 'SetRepertoire.php';
 
-include  $PHPMailer . "/src/PHPMailer.php";
-include  $PHPMailer . "/src/SMTP.php";
-include  $PHPMailer . "/src/Exception.php";
 
-use PHPMailer\PHPMailer\PHPMailer;
+include "../PHPMailer/src/PHPMailer.php";
+include "../PHPMailer/src/SMTP.php";
+include "../PHPMailer/src/Exception.php";
+
+use PHPMailer\PHPMailer\PHPMailer;                                                                                                           
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
@@ -32,7 +33,7 @@ $mail->Port = 587;
 $mail->SMTPAuth = true;
 //Username to use for SMTP authentication - use full email address for gmail
 //$mail->Username = "marc@servicesmckinnon.com";
-$mail->Username = "noreply@servicesmckinnon.com";
+$mail->Username = "noreply@servicesmckinnon.com";                
 //Password to use for SMTP authentication
 $mail->Password = "NoReply2019";
 $mail->setFrom($mail->Username, "No Reply");
